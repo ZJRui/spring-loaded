@@ -42,6 +42,13 @@ import org.springsource.loaded.ReloadEventProcessorPlugin;
  * add them into the handler list. We don't clear old ones out (yet) but the old mappings appear not to work anyway.
  * </ul>
  *
+ * 首先尝试使用 Spring-Loaded 的 Spring 插件。注意...
+ * 重新加载时，删除 orgspringframeworkwebservletmvcannotationAnnotationMethodHandlerAdapter.methodResolverCache 中的 Class 条目。
+ * 这使我们能够在控制器中添加更改请求映射。
+ * 那是给 Roo 的，如果我们创建一个简单的 spring 模板项目并运行它，这是行不通的。
+ * 看来我们需要重新驱动 DefaultAnnotationHandlerMapping 类型的 detectHandlers() ，
+ * 这将重新发现 URL 映射并将它们添加到处理程序列表中。我们还没有清除旧的映射，但旧的映射似乎无论如何都不起作用。自：0.5.0
+ *
  * @author Andy Clement
  * @since 0.5.0
  */

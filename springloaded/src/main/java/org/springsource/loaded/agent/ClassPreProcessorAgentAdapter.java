@@ -79,9 +79,18 @@ public class ClassPreProcessorAgentAdapter implements ClassFileTransformer {
 			// If reloadable - return the class as originally defined, and treat this new input data as the new version to make live
 			// If not-reloadable - rewrite the call sites and attempt hot code replace
 
+			/**
+			 *
+			 * 处理类重定义（热代码替换） - 做什么取决于该类型是否是可重载类型 如果可重载 - 返回原始定义的类
+			 * ，并将此新输入数据视为新版本以使其生效 如果不可重载- 重写呼叫站点并尝试热代码替换
+			 */
+
 			if (classBeingRedefined != null) {
 				// pretend no-one attempted the reload by returning original bytes.  The 'watcher' for the class
 				// should see the changes and pick them up.  Should we force it here?
+				/**
+				 * 假装没有人通过返回原始字节来尝试重新加载。班级的“观察者”应该看到这些变化并把它们捡起来。我们应该在这里强制吗？
+				 */
 				TypeRegistry typeRegistry = TypeRegistry.getTypeRegistryFor(loader);
 				if (typeRegistry == null) {
 					return null;

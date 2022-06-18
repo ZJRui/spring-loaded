@@ -57,6 +57,11 @@ import org.springsource.loaded.support.Java8;
  * types they cannot see)
  * </ul>
  *
+ * 代理的入口点 - 所有可以修改的类都将传递到 preProcess()。必须以下列方式之一处理它们：
+ * 可重载类型需要重写它们的字节码，以便以后可以修改
+ * “框架”类型（不由系统类加载器加载）需要重写它们的反射调用
+ * 系统类也需要以不同的方式修改它们的反射调用（它们不能依赖于它们看不到的类型）
+ *
  * @author Andy Clement
  * @since 0.5.0
  */
@@ -83,6 +88,7 @@ public class SpringLoadedPreProcessor implements Constants {
 	public void initialize() {
 		// When spring loaded is running as an agent, it should not be defining types directly (this setting does not apply to
 		// the generated suuport types)
+		//当 spring 加载作为代理运行时，它不应该直接定义类型（此设置不适用于生成的 suuport 类型）
 		GlobalConfiguration.directlyDefineTypes = false;
 		GlobalConfiguration.fileSystemMonitoring = true;
 		systemClassesContainingReflection = new ArrayList<String>();
@@ -109,6 +115,9 @@ public class SpringLoadedPreProcessor implements Constants {
 	 * Main entry point to Spring Loaded when it is running as an agent. This method will use the classLoader and the
 	 * class name in order to determine whether the type should be made reloadable. Non-reloadable types will at least
 	 * get their call sites rewritten.
+	 *
+	 * Spring Loaded 作为代理运行时的主要入口点。此方法将使用 classLoader 和类名来确定是否应使该类型可重新加载。
+	 * 不可重新加载的类型至少会重写它们的调用站点。
 	 *
 	 * @param classLoader the classloader loading this type
 	 * @param slashedClassName the slashed class name (e.g. java/lang/String) being loaded

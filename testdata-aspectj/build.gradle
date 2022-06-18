@@ -1,4 +1,4 @@
-def aspectjVersion = "1.8.0.M1"
+def aspectjVersion = "1.8.7"
 
 configurations {
 	aspects
